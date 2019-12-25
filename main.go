@@ -17,6 +17,8 @@ var (
 	mvc bool
 )
 
+const VERSION = "1.00"
+
 func init() {
 	flag.BoolVar(&h, "-h", false, "freeFishGo 帮助信息")
 
@@ -59,7 +61,7 @@ func createMvc(mvcName string) {
 }
 
 func usage() {
-	fmt.Fprintf(os.Stderr, `freefishgo version: `+freeFish.VERSION+`
+	fmt.Fprintf(os.Stderr, `freefishgo version: `+VERSION+`
 命令错误
 Usage: freefish h look help
 
@@ -70,7 +72,7 @@ Options:
 }
 
 func cmdHelp() {
-	fmt.Fprintf(os.Stderr, `freefishgo version: `+freeFish.VERSION+`
+	fmt.Fprintf(os.Stderr, `freefishgo version: `+VERSION+`
 Usage: freefish h look help
 
 Options:
