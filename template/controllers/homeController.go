@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"github.com/freefishgo/freeFish/middlewares/mvc"
-	"{ProjectName}/fishgo"
+	"github.com/freefishgo/freeFishGo/middlewares/mvc"
+	"{{ProjectName}}/fishgo"
 )
 
 // 实现mvc控制器的处理Main为控制器 {Controller}的值

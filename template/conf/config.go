@@ -2,10 +2,9 @@ package conf
 
 import (
 	"encoding/json"
-	"github.com/freefishgo/freeFish"
-	"github.com/freefishgo/freeFish/middlewares/mvc"
+	"github.com/freefishgo/freeFishGo/middlewares/mvc"
 	"os"
-	"{ProjectName}/fishgo"
+	"{{ProjectName}}/fishgo"
 )
 
 var Build *freeFish.ApplicationBuilder

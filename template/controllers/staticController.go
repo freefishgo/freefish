@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	"github.com/freefishgo/freeFish/middlewares/mvc"
+	"github.com/freefishgo/freeFishGo/middlewares/mvc"
 	"io/ioutil"
 	"path/filepath"
-	"{ProjectName}/fishgo"
+	"{{ProjectName}}/fishgo"
 )
 
 type staticController struct {
