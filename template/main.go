@@ -2,10 +2,10 @@ package main
 
 import (
 	"github.com/freefishgo/freeFishGo/middlewares/printTimeMiddleware"
-	"{{ProjectName}}/conf"
-	_ "{{ProjectName}}/controllers"
-	"{{ProjectName}}/fishgo"
-	_ "{{ProjectName}}/routers"
+	"{{.ProjectName}}/conf"
+	_ "{{.ProjectName}}/controllers"
+	"{{.ProjectName}}/fishgo"
+	_ "{{.ProjectName}}/routers"
 )
 
 func main() {

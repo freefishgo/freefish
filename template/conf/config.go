@@ -2,20 +2,21 @@ package conf
 
 import (
 	"encoding/json"
+	"github.com/freefishgo/freeFishGo"
 	"github.com/freefishgo/freeFishGo/middlewares/mvc"
 	"os"
-	"{{ProjectName}}/fishgo"
+	"{{.ProjectName}}/fishgo"
 )
 
-var Build *freeFish.ApplicationBuilder
+var Build *freeFishGo.ApplicationBuilder
 
 type config struct {
-	*freeFish.Config
+	*freeFishGo.Config
 	WebConfig *mvc.WebConfig
 }
 
 func init() {
-	Build = freeFish.NewFreeFishApplicationBuilder()
+	Build = freeFishGo.NewFreeFishApplicationBuilder()
 	conf := new(config)
 	f, err := os.Open("conf/app.conf")
 	if err!=nil{
