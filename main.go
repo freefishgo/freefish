@@ -66,7 +66,7 @@ func createMvc(mvcName string) {
 		log.Println("创建项目失败")
 		return
 	}
-	path, _ := filepath.Abs(mvcName)
+	path := filepath.Join(GOPATH, mvcName)
 
 	log.Println(filepath.Join(GOPATH, "src/github.com/freefishgo/freefish/template"))
 	if err := os.Mkdir(path, os.ModeDir); err != nil {
@@ -161,7 +161,7 @@ func copyFile(src, dest string) (w int64, err error) {
 		return
 	}
 	b, _ := ioutil.ReadFile(src)
-	t, e := template.New(src).Delims("{{", "}}").Parse(string(b))
+	t, e := template.New(src).Delims("{{[", "]}}").Parse(string(b))
 	if e != nil {
 		log.Println(e.Error())
 		dstFile.Write(b)
