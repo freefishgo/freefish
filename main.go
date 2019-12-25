@@ -60,6 +60,7 @@ func main() {
 }
 
 func createMvc(mvcName string) {
+	log.Println("生成MVC项目:" + mvcName + " 中.....")
 	GOPATH := os.Getenv("GOPATH")
 	if GOPATH == "" {
 		log.Println("未设置GOPATH环境变量")
@@ -71,11 +72,12 @@ func createMvc(mvcName string) {
 	log.Println(filepath.Join(GOPATH, "src/github.com/freefishgo/freefish/template"))
 	if err := os.Mkdir(path, os.ModeDir); err != nil {
 		panic(err.Error())
-	} else {
-		log.Println("mkdir Suff")
 	}
-	CopyDir(filepath.Join(GOPATH, "src/github.com/freefishgo/freefish/template"), path)
-
+	if err := CopyDir(filepath.Join(GOPATH, "src/github.com/freefishgo/freefish/template"), path); err != nil {
+		log.Println("MVC项目:" + mvcName + " 生成失败.....失败原因为:" + err.Error())
+	} else {
+		log.Println("MVC项目:" + mvcName + " 生成成功.....请查看目录:" + path)
+	}
 	//if err := os.Mkdir(path, os.ModeDir); err != nil {
 	//	panic(err.Error())
 	//} else {
@@ -120,7 +122,7 @@ func CopyDir(srcPath string, destPath string) error {
 			srcPath = strings.Replace(srcPath, "\\", "/", -1)
 			destPath = strings.Replace(destPath, "\\", "/", -1)
 			destNewPath := strings.Replace(path, srcPath, destPath, -1)
-			fmt.Println("复制文件:" + path + " 到 " + destNewPath)
+			fmt.Println("创建文件：" + destNewPath + " 成功")
 			copyFile(path, destNewPath)
 		}
 		return nil
@@ -161,20 +163,25 @@ func copyFile(src, dest string) (w int64, err error) {
 		return
 	}
 	b, _ := ioutil.ReadFile(src)
-	t, e := template.New(src).Delims("{{[", "]}}").Parse(string(b))
-	if e != nil {
-		log.Println(e.Error())
-		dstFile.Write(b)
+	if filepath.Ext(src) == ".go" {
+		t, e := template.New(src).Delims("{{[", "]}}").Parse(string(b))
+		if e != nil {
+			log.Println(e.Error())
+			dstFile.Write(b)
+			return
+		} else {
+			data := map[string]interface{}{}
+			data["ProjectName"] = ProjectName
+			t.Execute(dstFile, data)
+
+			defer dstFile.Close()
+			return
+		}
 		return
 	} else {
-		data := map[string]interface{}{}
-		data["ProjectName"] = ProjectName
-		t.Execute(dstFile, data)
-
-		defer dstFile.Close()
-		return
+		dstFile.Write(b)
 	}
-
+	return
 }
 
 //检测文件夹路径时候存在
