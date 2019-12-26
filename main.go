@@ -25,9 +25,9 @@ const VERSION = "1.00"
 func init() {
 	flag.BoolVar(&h, "-h", false, "freeFishGo 帮助信息")
 
-	flag.BoolVar(&new, "new", false, "创建一个新的项目 如:freefish new [ProjectName]")
+	flag.BoolVar(&new, "new", false, "创建一个新的mvc项目 如:freefish new [ProjectName]")
 
-	flag.BoolVar(&mvc, "mvc", false, "创建一个新的mvc项目 如:freefish new mvc [ProjectName]")
+	flag.BoolVar(&mvc, "-gopath", false, "在GOPATH下创建一个新的mvc项目 如:freefish new -gopath [ProjectName]")
 
 	// 改变默认的 Usage
 	flag.Usage = usage
@@ -47,10 +47,15 @@ func main() {
 		cmdHelp()
 		return
 	case "new":
-		if lens == 3 {
+		if lens == 3 && os.Args[2][0] != '-' {
+			path, _ := filepath.Abs(os.Args[2])
+			WorkDir = path
 			ProjectName = os.Args[2]
-			return
-		} else if os.Args[2] == "mvc" && lens == 4 {
+			createMvc(os.Args[2])
+		} else if lens == 4 && os.Args[2] == "-gopath" {
+			GOPATH := os.Getenv("GOPATH")
+			path := filepath.Join(GOPATH, "src", os.Args[3])
+			WorkDir = path
 			ProjectName = os.Args[3]
 			createMvc(os.Args[3])
 		} else {
@@ -68,16 +73,14 @@ func createMvc(mvcName string) {
 		log.Println("创建项目失败")
 		return
 	}
-	path, _ := filepath.Abs(mvcName)
-	WorkDir = path
 	log.Println(filepath.Join(GOPATH, "src/github.com/freefishgo/freefish/template"))
-	if err := os.Mkdir(path, os.ModeDir); err != nil {
+	if err := os.Mkdir(WorkDir, os.ModeDir); err != nil {
 		panic(err.Error())
 	}
-	if err := CopyDir(filepath.Join(GOPATH, "src/github.com/freefishgo/freefish/template"), path); err != nil {
+	if err := CopyDir(filepath.Join(GOPATH, "src/github.com/freefishgo/freefish/template"), WorkDir); err != nil {
 		log.Println("MVC项目:" + mvcName + " 生成失败.....失败原因为:" + err.Error())
 	} else {
-		log.Println("MVC项目:" + mvcName + " 生成成功.....请查看目录:" + path)
+		log.Println("MVC项目:" + mvcName + " 生成成功.....请查看目录:" + WorkDir)
 	}
 	//if err := os.Mkdir(path, os.ModeDir); err != nil {
 	//	panic(err.Error())
