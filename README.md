@@ -43,7 +43,7 @@ Options:
    new
         创建一个新的mvc项目 如:freefish new [ProjectName]
 PS D:\>
-`
+```
 
 ```bash
 
@@ -73,7 +73,7 @@ PS D:\> freefish new  mysqlwebhelp
 创建目录:D:/mysqlwebhelp/views/Home/
 2019/12/26 11:13:43 MVC项目:mysqlwebhelp 生成成功.....请查看目录:D:\mysqlwebhelp
 PS D:\>
-`
+```
 ```bash
 PS C:\Users\JackShan\go\src\github.com\freefishgo> freefish new -gopath myfreefish
 2019/12/26 13:43:44 生成MVC项目:myfreefish 中.....
@@ -101,4 +101,4 @@ PS C:\Users\JackShan\go\src\github.com\freefishgo> freefish new -gopath myfreefi
 创建目录:C:/Users/JackShan/go/src/myfreefish/views/Home/
 2019/12/26 13:43:44 MVC项目:myfreefish 生成成功.....请查看目录:C:\Users\JackShan\go\src\myfreefish
 PS C:\Users\JackShan\go\src\github.com\freefishgo>
-`
+```
