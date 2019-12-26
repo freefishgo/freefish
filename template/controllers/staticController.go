@@ -29,8 +29,8 @@ func (static *staticController) StaticFile(d *data) {
 		static.Response.Write([]byte(err.Error()))
 	}
 }
-
-func (static *staticController) SetInfo() []*mvc.ControllerActionInfo {
+// 重写 指定动作的路由
+func (static *staticController) OverwriteRouter() []*mvc.ControllerActionInfo {
 	tmp := make([]*mvc.ControllerActionInfo, 0)
 	tmp = append(tmp, &mvc.ControllerActionInfo{RouterPattern: "static/{path:allString}", ControllerActionFuncName: "StaticFile"})
 	return tmp

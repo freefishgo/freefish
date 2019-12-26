@@ -67,7 +67,7 @@ func createMvc(mvcName string) {
 		log.Println("创建项目失败")
 		return
 	}
-	path := filepath.Join(GOPATH, "src", mvcName)
+	path, _ := filepath.Abs(mvcName)
 
 	log.Println(filepath.Join(GOPATH, "src/github.com/freefishgo/freefish/template"))
 	if err := os.Mkdir(path, os.ModeDir); err != nil {
