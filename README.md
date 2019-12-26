@@ -24,12 +24,12 @@ go get -u github.com/freefishgo/freefish
 
 freefish provides a variety of commands which can be helpful at various stages of development. The top level commands include:
 
-```
+```bash
     -h          获得帮助文档
     new         在当前文件夹下 构建一个freefishgo mvc项目
     new -gopath 在gopath目录下的src构建一个freefishgo mvc项目
 
-`
+```
 ```bash
 PS D:\> freefish -h
 freefishgo version: 1.00
