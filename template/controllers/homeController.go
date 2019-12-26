@@ -10,7 +10,7 @@ type HomeController struct {
 	mvc.Controller
 }
 
-// 注册控制器
+// 把控制器注入到mvc框架中去
 func init() {
 	fishgo.Mvc.AddHandlers(&HomeController{})
 }

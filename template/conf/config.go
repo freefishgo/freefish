@@ -7,11 +7,13 @@ import (
 	"os"
 	"{{[.ProjectName]}}/fishgo"
 )
-
+// 管道
 var Build *freeFishGo.ApplicationBuilder
-
+// 应用配置
 type config struct {
+	// 管道配置
 	*freeFishGo.Config
+	// mvc中间件的配置
 	WebConfig *mvc.MvcWebConfig
 }
 
