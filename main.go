@@ -34,6 +34,7 @@ func init() {
 }
 
 var ProjectName string
+var WorkDir string
 
 func main() {
 	lens := len(os.Args)
@@ -68,7 +69,7 @@ func createMvc(mvcName string) {
 		return
 	}
 	path, _ := filepath.Abs(mvcName)
-
+	WorkDir = path
 	log.Println(filepath.Join(GOPATH, "src/github.com/freefishgo/freefish/template"))
 	if err := os.Mkdir(path, os.ModeDir); err != nil {
 		panic(err.Error())
@@ -170,10 +171,9 @@ func copyFile(src, dest string) (w int64, err error) {
 			dstFile.Write(b)
 			return
 		} else {
-			dir := filepath.Dir(os.Args[0])
 			data := map[string]interface{}{}
 			data["ProjectName"] = ProjectName
-			data["Chdir"] = dir
+			data["Chdir"] = WorkDir
 			t.Execute(dstFile, data)
 
 			defer dstFile.Close()
