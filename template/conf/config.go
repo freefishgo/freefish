@@ -5,7 +5,6 @@ import (
 	"github.com/freefishgo/freeFishGo"
 	"github.com/freefishgo/freeFishGo/middlewares/mvc"
 	"os"
-	"path/filepath"
 	"{{[.ProjectName]}}/fishgo"
 )
 
