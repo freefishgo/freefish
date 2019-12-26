@@ -14,7 +14,7 @@ Then you can add `freefish` binary to PATH environment variable in your `~/.bash
 export PATH=$PATH:<your_main_gopath>/bin
 ```
 
-> If you already have `freefish` installed, updating `bee` is simple:
+> If you already have `freefish` installed, updating `freefish` is simple:
 
 ```bash
 go get -u github.com/freefishgo/freefish
