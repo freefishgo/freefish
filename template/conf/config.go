@@ -19,7 +19,7 @@ type config struct {
 func init() {
 	Build = freeFishGo.NewFreeFishApplicationBuilder()
 	conf := new(config)
-	os.Chdir({{[.Chdir]}})
+	os.Chdir("{{[.Chdir]}}")
 	f, err := os.Open("conf/app.conf")
 	if err!=nil{
 		panic(err.Error())
