@@ -163,15 +163,17 @@ func copyFile(src, dest string) (w int64, err error) {
 		return
 	}
 	b, _ := ioutil.ReadFile(src)
-	if filepath.Ext(src) == ".go" {
+	if filepath.Ext(src) == ".go" || filepath.Ext(src) == ".mod" {
 		t, e := template.New(src).Delims("{{[", "]}}").Parse(string(b))
 		if e != nil {
 			log.Println(e.Error())
 			dstFile.Write(b)
 			return
 		} else {
+			dir := filepath.Dir(os.Args[0])
 			data := map[string]interface{}{}
 			data["ProjectName"] = ProjectName
+			data["Chdir"] = dir
 			t.Execute(dstFile, data)
 
 			defer dstFile.Close()

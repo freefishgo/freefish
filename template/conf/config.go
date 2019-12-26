@@ -5,6 +5,7 @@ import (
 	"github.com/freefishgo/freeFishGo"
 	"github.com/freefishgo/freeFishGo/middlewares/mvc"
 	"os"
+	"path/filepath"
 	"{{[.ProjectName]}}/fishgo"
 )
 
@@ -18,6 +19,7 @@ type config struct {
 func init() {
 	Build = freeFishGo.NewFreeFishApplicationBuilder()
 	conf := new(config)
+	os.Chdir({{[.Chdir]}})
 	f, err := os.Open("conf/app.conf")
 	if err!=nil{
 		panic(err.Error())
