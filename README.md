@@ -5,6 +5,7 @@
 To install `freefish` use the `go get` command:
 
 ```bash
+go get github.com/freefishgo/freefishgo
 go get github.com/freefishgo/freefish
 ```
 
@@ -18,6 +19,7 @@ export PATH=$PATH:<your_main_gopath>/bin
 
 ```bash
 go get -u github.com/freefishgo/freefish
+go get -u github.com/freefishgo/freefishgo
 ```
 
 ## Basic commands
