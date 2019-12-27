@@ -18,8 +18,8 @@ export PATH=$PATH:<your_main_gopath>/bin
 > If you already have `freefish` installed, updating `freefish` is simple:
 
 ```bash
-go get -u github.com/freefishgo/freefish
 go get -u github.com/freefishgo/freefishgo
+go get -u github.com/freefishgo/freefish
 ```
 
 ## Basic commands
