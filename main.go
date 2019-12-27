@@ -16,18 +16,23 @@ import (
 var (
 	h bool
 
-	new bool
-	mvc bool
+	new  bool
+	view bool
 )
 
 const VERSION = "1.00"
 
 func init() {
-	flag.BoolVar(&h, "-h", false, "freeFishGo 帮助信息")
+	flag.BoolVar(&h, "-h", true, "freeFishGo 帮助信息")
 
-	flag.BoolVar(&new, "new", false, "创建一个新的mvc项目 如:freefish new [ProjectName]")
+	flag.BoolVar(&new, "new", false, `创建一个新的mvc项目 具体有:
+freefish new [ProjectName]                :在当前目录下创建mvc项目
+freefish new [ProjectName] -path [dirPath]:在当前目录dirPath创建mvc项目
+freefish new -gopath [ProjectName]        :在GOPATH下创建一个新的mvc项目`)
 
-	flag.BoolVar(&mvc, "-gopath", false, "在GOPATH下创建一个新的mvc项目 如:freefish new -gopath [ProjectName]")
+	flag.BoolVar(&view, "view", false, `在freefish生成的项目中操作视图 具体命令有:
+freefish view check ：检查Mvc视图文件是否存在，打印缺视图的控制器和视图
+freefish view create：遍历Mvc控制器文件，创建缺失的视图`)
 
 	// 改变默认的 Usage
 	flag.Usage = usage
@@ -35,8 +40,10 @@ func init() {
 
 var ProjectName string
 var WorkDir string
+var importPath string
 
 func main() {
+	flag.Parse()
 	lens := len(os.Args)
 	if lens < 2 {
 		flag.Usage()
@@ -47,6 +54,32 @@ func main() {
 		cmdHelp()
 		return
 	case "new":
+		if lens == 3 && os.Args[2][0] != '-' {
+			path, _ := filepath.Abs(os.Args[2])
+			WorkDir = path
+			importPath = os.Args[2]
+			ProjectName = os.Args[2]
+			createMvc(os.Args[2])
+		} else if lens == 4 && os.Args[2] == "-gopath" {
+			GOPATH := os.Getenv("GOPATH")
+			path := filepath.Join(GOPATH, "src", os.Args[3])
+			WorkDir = path
+			ProjectName = os.Args[3]
+			createMvc(os.Args[3])
+		} else if (lens == 5 || lens == 4) && os.Args[3] == "-path" {
+			tmp, _ := filepath.Abs("")
+			if lens == 4 {
+				os.Args = append(os.Args, "")
+			}
+			path, _ := filepath.Abs(filepath.Join(os.Args[4], os.Args[2]))
+			WorkDir = path
+			importPath = strings.Replace(filepath.Join(filepath.Base(tmp), os.Args[4], os.Args[2]), "\\", "/", -1)
+			ProjectName = os.Args[2]
+			createMvc(os.Args[2])
+		} else {
+			flag.Usage()
+		}
+	case "view":
 		if lens == 3 && os.Args[2][0] != '-' {
 			path, _ := filepath.Abs(os.Args[2])
 			WorkDir = path
@@ -61,6 +94,8 @@ func main() {
 		} else {
 			flag.Usage()
 		}
+	default:
+		flag.Usage()
 
 	}
 }
@@ -175,7 +210,7 @@ func copyFile(src, dest string) (w int64, err error) {
 			return
 		} else {
 			data := map[string]interface{}{}
-			data["ProjectName"] = ProjectName
+			data["ProjectName"] = importPath
 			data["Chdir"] = WorkDir
 			t.Execute(dstFile, data)
 
@@ -237,6 +272,6 @@ func MyVisit(flag2 *flag.Flag) {
 		// for both 4- and 8-space tab stops.
 		s += "\n    \t"
 	}
-	s += strings.ReplaceAll(usage, "\n", "\n    \t")
+	s += strings.Replace(usage, "\n", "\n    \t", -1)
 	fmt.Fprint(os.Stderr, s, "\n")
 }

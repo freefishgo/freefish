@@ -34,8 +34,8 @@ func (static *staticController) StaticFile(d *data) {
 	}
 }
 // 重写 指定动作的路由 该方法会在路由注册时调用
-func (static *staticController) OverwriteRouter() []*mvc.ControllerActionInfo {
-	tmp := make([]*mvc.ControllerActionInfo, 0)
-	tmp = append(tmp, &mvc.ControllerActionInfo{RouterPattern: "static/{path:allString}", ControllerActionFuncName: "StaticFile"})
+func (static *staticController) OverwriteRouter() []*mvc.ControllerActionRouter {
+	tmp := make([]*mvc.ControllerActionRouter, 0)
+	tmp = append(tmp, &mvc.ControllerActionRouter{RouterPattern: "static/{path:allString}", ControllerActionFuncName: "StaticFile"})
 	return tmp
 }
