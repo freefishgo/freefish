@@ -3,7 +3,6 @@ package controllers
 import (
 	"github.com/freefishgo/freeFishGo/middlewares/mvc"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"{{[.ProjectName]}}/fishgo"
