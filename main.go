@@ -104,7 +104,7 @@ func main() {
 				} else {
 					if f, err := os.Create(path); err == nil {
 						defer f.Close()
-						f.Write([]byte(strings.Replace(controllerText, "{{[Controller]}}", os.Args[2]+"Controller", -1)))
+						f.Write([]byte(strings.Replace(strings.Replace(controllerText, "{{[Controller]}}", os.Args[2]+"Controller", -1), "{{[Name]}}", os.Args[2], -1)))
 						log.Println("freeFish:->Controller:" + os.Args[2] + "Controller创建成功,文件地址为:" + path)
 					} else {
 						panic(err)
@@ -282,11 +282,11 @@ func init() {
 	mvc.AddHandlers(&{{[Controller]}}{})
 }
 
-func (c *{{[Controller]}}) Index() {
+func ({{[Name]}} *{{[Controller]}}) Index() {
 }
 
 // 重写 指定动作的路由 该方法会在路由注册时调用
-func (static *staticController) OverwriteRouter() []*mvc.ControllerActionRouter {
+func ({{[Name]}} *{{[Controller]}}) OverwriteRouter() []*mvc.ControllerActionRouter {
 	return nil
 }`
 )
