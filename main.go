@@ -102,7 +102,6 @@ func main() {
 				if b {
 					log.Println("freeFish:->Controller:" + os.Args[2] + "创建失败,由于已有" + os.Args[2] + "Controller.go已经存在")
 				} else {
-					createFile(filepath.Dir(path))
 					if f, err := os.Create(path); err == nil {
 						defer f.Close()
 						f.Write([]byte(strings.Replace(strings.Replace(controllerText, "{{[Controller]}}", os.Args[2]+"Controller", -1), "{{[Name]}}", os.Args[2], -1)))
@@ -229,7 +228,7 @@ func viewCheck(viewDir string, controllerDir string, ty string) error {
 										if err != nil {
 											panic(err)
 										}
-										log.Println("freeFish:->路径:" + path + " Controller:" + s[0][1] + " Action:" + s[0][2] + " 创建视图:" + filepath.Join(s[0][1][0:controllerIndex], replaceActionName(s[0][2])+".fish") + " 行号:" + strconv.Itoa(lineIndex))
+										log.Println("freeFish:->路径:" + path + " Controller:" + s[0][1] + " Action:" + s[0][2] + " 成功创建视图:" + filepath.Join(s[0][1][0:controllerIndex], replaceActionName(s[0][2])+".fish") + " 行号:" + strconv.Itoa(lineIndex))
 									}
 								}
 							}
@@ -247,7 +246,7 @@ func viewCheck(viewDir string, controllerDir string, ty string) error {
 									if err != nil {
 										panic(err)
 									}
-									log.Println("freeFish:->路径:" + path + " Controller:" + s[0][1] + " Action:" + s[0][2] + " 创建视图:" + v[1] + " 行号:" + strconv.Itoa(lineIndex))
+									log.Println("freeFish:->路径:" + path + " Controller:" + s[0][1] + " Action:" + s[0][2] + " 成功创建视图:" + v[1] + " 行号:" + strconv.Itoa(lineIndex))
 								}
 							}
 						}
