@@ -1,4 +1,4 @@
-# freefish 是freefishgo的一个项目快速构建工具（https://github.com/freefishgo/freeFishGo）
+# freefish 是freefishgo的一个项目快速构建工具（https://github.com/freefishgo/freeFishGo ）
 
 
 ## 详细文档请查看 http://freefishgo.com
