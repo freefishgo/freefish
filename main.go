@@ -1,13 +1,17 @@
 package main
 
 import (
+	"bufio"
 	"errors"
 	"flag"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
+	"regexp"
+	"strconv"
 	"strings"
 	"text/template"
 )
@@ -31,13 +35,12 @@ freefish new [ProjectName]                :在当前目录下创建mvc项目
 freefish new [ProjectName] -path [dirPath]:在当前目录dirPath创建mvc项目
 freefish new -gopath [ProjectName]        :在GOPATH下创建一个新的mvc项目`)
 
-	flag.BoolVar(&view, "view", false, `在freefish生成的项目中操作视图 具体命令有:
-freefish view check ：检查Mvc视图文件是否存在，打印缺视图的控制器和视图
-freefish view create：遍历Mvc控制器文件，创建缺失的视图`)
+	flag.BoolVar(&view, "-v", false, `在freefish生成的项目中操作视图 具体命令有:
+freefish -v check ：检查Mvc视图文件是否存在，打印缺视图的控制器和视图
+freefish -v create：遍历Mvc控制器文件，创建缺失的视图`)
 
-	flag.BoolVar(&controller, "controller", false, `在freefish生成的项目中操作视图 具体命令有:
-freefish controller [controllerName] ：在controller文件夹下生成 controllerName+"Controller" 控制器
-freefish controller create：遍历Mvc控制器文件，创建缺失的视图`)
+	flag.BoolVar(&controller, "-c", false, `在freefish生成的项目中操作视图 具体命令有:
+freefish -c [controllerName] ：在controllers文件夹下生成 controllerName+"Controller" 控制器`)
 
 	// 改变默认的 Usage
 	flag.Usage = usage
@@ -48,7 +51,6 @@ var WorkDir string
 var importPath string
 
 func main() {
-	flag.Parse()
 	lens := len(os.Args)
 	if lens < 2 {
 		flag.Usage()
@@ -85,18 +87,32 @@ func main() {
 		} else {
 			flag.Usage()
 		}
-	case "view":
-		if lens == 3 && os.Args[2][0] != '-' {
-			path, _ := filepath.Abs(os.Args[2])
-			WorkDir = path
-			ProjectName = os.Args[2]
-			createMvc(os.Args[2])
-		} else if lens == 4 && os.Args[2] == "-gopath" {
-			GOPATH := os.Getenv("GOPATH")
-			path := filepath.Join(GOPATH, "src", os.Args[3])
-			WorkDir = path
-			ProjectName = os.Args[3]
-			createMvc(os.Args[3])
+	case "-v":
+		if lens == 3 && os.Args[2] == "check" {
+			viewCheck("", "", os.Args[2])
+		} else if lens == 3 && os.Args[2] == "create" {
+			viewCheck("", "", os.Args[2])
+		} else {
+			flag.Usage()
+		}
+	case "-c":
+		if lens == 3 {
+			path := filepath.Join("controllers", os.Args[2]+"Controller.go")
+			if b, err := pathExists(path); err == nil {
+				if b {
+					log.Println("freeFish:->Controller:" + os.Args[2] + "创建失败,由于已有" + os.Args[2] + "Controller.go已经存在")
+				} else {
+					if f, err := os.Create(path); err == nil {
+						defer f.Close()
+						f.Write([]byte(strings.Replace(controllerText, "{{[Controller]}}", os.Args[2]+"Controller", -1)))
+						log.Println("freeFish:->Controller:" + os.Args[2] + "Controller创建成功,文件地址为:" + path)
+					} else {
+						panic(err)
+					}
+				}
+			} else {
+				panic(err)
+			}
 		} else {
 			flag.Usage()
 		}
@@ -104,6 +120,204 @@ func main() {
 		flag.Usage()
 
 	}
+}
+
+func viewCheck(viewDir string, controllerDir string, ty string) error {
+	if viewDir == "" {
+		viewDir = "views"
+	}
+	if controllerDir == "" {
+		controllerDir = "controllers"
+	}
+	//检测目录正确性
+	if srcInfo, err := os.Stat(viewDir); err != nil {
+		fmt.Println(err.Error())
+		return err
+	} else {
+		if !srcInfo.IsDir() {
+			e := errors.New("srcPath不是一个正确的目录！")
+			fmt.Println(e.Error())
+			return e
+		}
+	}
+	//检测目录正确性
+	if srcInfo, err := os.Stat(controllerDir); err != nil {
+		fmt.Println(err.Error())
+		return err
+	} else {
+		if !srcInfo.IsDir() {
+			e := errors.New("srcPath不是一个正确的目录！")
+			fmt.Println(e.Error())
+			return e
+		}
+	}
+
+	err := filepath.Walk(controllerDir, func(path string, f os.FileInfo, err error) error {
+		if f == nil {
+			return err
+		}
+		if !f.IsDir() {
+			f, _ := os.Open(path)
+			defer f.Close()
+			lineIndex := 0
+			upCount := 0
+			offCount := 0
+			tmpStr := ""
+			rd := bufio.NewReader(f)
+			for {
+				line, err := rd.ReadString('\n') //以'\n'为结束符读入一行
+				lineIndex++
+				if err != nil || io.EOF == err {
+					break
+				}
+				line = strings.Trim(line, "\n")
+				line = strings.Trim(line, "\t")
+				line = strings.Trim(line, "\n")
+				line = strings.Trim(line, "\t")
+				line = strings.Trim(line, " ")
+				r := regexp.MustCompile(`^[//]`)
+				b := r.MatchString(line)
+				if b || len(line) == 0 {
+					continue
+				}
+				line = strings.Split(line, "//")[0]
+				tmpStr += line + " "
+				upCount += strings.Count(line, "{")
+				offCount += strings.Count(line, "}")
+				r = regexp.MustCompile(`UseTplPath[\ ]?\([\ ]?(.*?)[\ ]?\)`)
+				if r.MatchString(line) {
+					sl := r.FindAllStringSubmatch(line, -1)
+					r = regexp.MustCompile(`func[\ ]?\([\w+$]+[\ ]+\*[\ ]?([\w+$]+)[\ ]?\)[\ ]?([\w+$]+)\(.*?\)`)
+					for _, v := range sl {
+						s := r.FindAllStringSubmatch(tmpStr, -1)
+						v[1] = strings.Trim(v[1], `"`)
+						if v[1] == "" {
+							if len(s) > 0 {
+								controllerIndex := strings.Index(strings.ToLower(s[0][1]), "controller")
+								viewPath := filepath.Join(viewDir, s[0][1][0:controllerIndex], replaceActionName(s[0][2])+".fish")
+								if b, _ := pathExists(viewPath); !b {
+									switch ty {
+									case "check":
+										log.Println("freeFish:->路径:" + path + " Controller:" + s[0][1] + " Action:" + s[0][2] + " 缺失视图:" + filepath.Join(s[0][1][0:controllerIndex], replaceActionName(s[0][2])+".fish") + " 行号:" + strconv.Itoa(lineIndex))
+									case "create":
+										f, err := os.Create(viewPath)
+										f.Write([]byte(htmlText))
+										defer f.Close()
+										if err != nil {
+											panic(err)
+										}
+										log.Println("freeFish:->路径:" + path + " Controller:" + s[0][1] + " Action:" + s[0][2] + " 创建视图:" + filepath.Join(s[0][1][0:controllerIndex], replaceActionName(s[0][2])+".fish") + " 行号:" + strconv.Itoa(lineIndex))
+									}
+								}
+							}
+						} else {
+							viewPath := filepath.Join(viewDir, v[1])
+							if b, _ := pathExists(viewPath); !b {
+								switch ty {
+								case "check":
+									log.Println("freeFish:->路径:" + path + " Controller:" + s[0][1] + " Action:" + s[0][2] + " 缺失视图:" + v[1] + " 行号:" + strconv.Itoa(lineIndex))
+								case "create":
+									f, err := os.Create(viewPath)
+									f.Write([]byte(htmlText))
+									defer f.Close()
+									if err != nil {
+										panic(err)
+									}
+									log.Println("freeFish:->路径:" + path + " Controller:" + s[0][1] + " Action:" + s[0][2] + " 创建视图:" + v[1] + " 行号:" + strconv.Itoa(lineIndex))
+								}
+							}
+						}
+					}
+				}
+				if upCount == offCount {
+					upCount = 0
+					offCount = 0
+					tmpStr = ""
+				}
+			}
+		}
+		return nil
+	})
+
+	if err != nil {
+		fmt.Printf(err.Error())
+	}
+	return err
+
+}
+
+type HttpMethod string
+
+const (
+	MethodGet     HttpMethod = "GET"
+	MethodHead    HttpMethod = "HEAD"
+	MethodPost    HttpMethod = "POST"
+	MethodPut     HttpMethod = "PUT"
+	MethodPatch   HttpMethod = "PATCH" // RFC 5789
+	MethodDelete  HttpMethod = "DELETE"
+	MethodConnect HttpMethod = "CONNECT"
+	MethodOptions HttpMethod = "OPTIONS"
+	MethodTrace   HttpMethod = "TRACE"
+	htmlText      string     = `<!DOCTYPE html>
+<html>
+<head>
+    <title>FreeFishGo</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+	欢迎使用 fishFreeGoMvc
+</body>
+</html>`
+	controllerText string = `package controllers
+
+import (
+	"github.com/freefishgo/freefishgo/middlewares/mvc"
+)
+
+type {{[Controller]}} struct {
+	mvc.Controller
+}
+
+func init() {
+	mvc.AddHandlers(&{{[Controller]}}{})
+}
+
+func (c *{{[Controller]}}) Index() {
+}
+
+// 重写 指定动作的路由 该方法会在路由注册时调用
+func (static *staticController) OverwriteRouter() []*mvc.ControllerActionRouter {
+	return nil
+}`
+)
+
+func replaceActionName(actionName string) string {
+	tmp := actionName
+	actionName = strings.ToUpper(actionName)
+	httpMethodList := []HttpMethod{MethodPost,
+		MethodConnect, MethodDelete,
+		MethodGet, MethodHead, MethodOptions,
+		MethodPatch, MethodPut, MethodTrace}
+	for _, v := range httpMethodList {
+		f := regexp.MustCompile(string(v) + "$")
+		if f.MatchString(actionName) {
+			index := f.FindAllStringIndex(actionName, -1)
+			return tmp[0:index[0][0]]
+		}
+	}
+	return tmp
+
+}
+
+func PathExists(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return false, err
 }
 
 func createMvc(mvcName string) {

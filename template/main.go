@@ -1,14 +1,12 @@
 package main
 
 import (
-	"github.com/freefishgo/freefishgo/middlewares/mvc"
-
 	"github.com/freefishgo/freefishgo"
+	"github.com/freefishgo/freefishgo/middlewares/mvc"
 	"github.com/freefishgo/freefishgo/middlewares/printTimeMiddleware"
 	_ "{{[.ProjectName]}}/conf"
 	_ "{{[.ProjectName]}}/controllers"
 	_ "{{[.ProjectName]}}/routers"
-
 )
 
 func main() {
