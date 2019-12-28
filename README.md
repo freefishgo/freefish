@@ -30,9 +30,25 @@ go get -u github.com/freefishgo/freefish
 freefish provides a variety of commands which can be helpful at various stages of development. The top level commands include:
 
 ```bash
-    -h          获得帮助文档
-    new         在当前文件夹下 构建一个freefishgo mvc项目
-    new -gopath 在gopath目录下的src构建一个freefishgo mvc项目
+C:\Users\huzhouyu>freefish -h
+freefishgo version: 1.00
+Usage: freefish h look help
+
+Options:
+   -c
+        在freefish生成的项目中操作视图 具体命令有:
+        freefish -c [controllerName] ：在controllers文件夹下生成 controllerName+"Controller" 控制器
+   -h
+        freeFishGo 帮助信息
+   -v
+        在freefish生成的项目中操作视图 具体命令有:
+        freefish -v check ：检查Mvc视图文件是否存在，打印缺视图的控制器和视图
+        freefish -v create：遍历Mvc控制器文件，创建缺失的视图
+   new
+        创建一个新的mvc项目 具体有:
+        freefish new [ProjectName]                :在当前目录下创建mvc项目
+        freefish new [ProjectName] -path [dirPath]:在当前目录dirPath创建mvc项目
+        freefish new -gopath [ProjectName]        :在GOPATH下创建一个新的mvc项目
 
 ```
 ```bash
@@ -49,9 +65,8 @@ Options:
         创建一个新的mvc项目 如:freefish new [ProjectName]
 PS D:\>
 ```
-
+>在当前目录下构建一个叫mysqlwebhelp的项目
 ```bash
-
 PS D:\> freefish new  mysqlwebhelp
 2019/12/26 11:13:43 生成MVC项目:mysqlwebhelp 中.....
 2019/12/26 11:13:43 C:\Users\JackShan\go\src\github.com\freefishgo\freefish\template
@@ -79,6 +94,7 @@ PS D:\> freefish new  mysqlwebhelp
 2019/12/26 11:13:43 MVC项目:mysqlwebhelp 生成成功.....请查看目录:D:\mysqlwebhelp
 PS D:\>
 ```
+>在gopath目录下构建一个叫mysqlwebhelp的项目
 ```bash
 PS C:\Users\JackShan\go\src\github.com\freefishgo> freefish new -gopath myfreefish
 2019/12/26 13:43:44 生成MVC项目:myfreefish 中.....
@@ -107,3 +123,19 @@ PS C:\Users\JackShan\go\src\github.com\freefishgo> freefish new -gopath myfreefi
 2019/12/26 13:43:44 MVC项目:myfreefish 生成成功.....请查看目录:C:\Users\JackShan\go\src\myfreefish
 PS C:\Users\JackShan\go\src\github.com\freefishgo>
 ```
+>在当前项目创建一个名叫create的控制器
+```bash
+C:\Users\huzhouyu\go\src\freefishgodoc>freefish -c create
+2019/12/28 19:39:57 freeFish:->Controller:createController创建成功,文件地址为:controllers\createController.go
+```
+>检查是否有使用了的视图 没有创建
+```bash
+C:\Users\huzhouyu\go\src\freefishgodoc>freefish -v check
+2019/12/28 19:45:21 freeFish:->路径:controllers\createController.go Controller:createController Action:Index 缺失视图:create\Index.fish 行号:16
+```
+>创建使用了没有创建的视图
+```bash
+C:\Users\huzhouyu\go\src\freefishgodoc>freefish -v create
+2019/12/28 19:47:19 freeFish:->路径:controllers\createController.go Controller:createController Action:Index 成功创建视图:create\Index.fish 行号:16
+```
+
