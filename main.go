@@ -222,6 +222,7 @@ func viewCheck(viewDir string, controllerDir string, ty string) error {
 									case "check":
 										log.Println("freeFish:->路径:" + path + " Controller:" + s[0][1] + " Action:" + s[0][2] + " 缺失视图:" + filepath.Join(s[0][1][0:controllerIndex], replaceActionName(s[0][2])+".fish") + " 行号:" + strconv.Itoa(lineIndex))
 									case "create":
+										createFile(filepath.Dir(path))
 										f, err := os.Create(viewPath)
 										f.Write([]byte(htmlText))
 										defer f.Close()
@@ -239,6 +240,7 @@ func viewCheck(viewDir string, controllerDir string, ty string) error {
 								case "check":
 									log.Println("freeFish:->路径:" + path + " Controller:" + s[0][1] + " Action:" + s[0][2] + " 缺失视图:" + v[1] + " 行号:" + strconv.Itoa(lineIndex))
 								case "create":
+									createFile(filepath.Dir(path))
 									f, err := os.Create(viewPath)
 									f.Write([]byte(htmlText))
 									defer f.Close()
