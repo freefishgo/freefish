@@ -102,6 +102,7 @@ func main() {
 				if b {
 					log.Println("freeFish:->Controller:" + os.Args[2] + "创建失败,由于已有" + os.Args[2] + "Controller.go已经存在")
 				} else {
+					createFile(filepath.Dir(path))
 					if f, err := os.Create(path); err == nil {
 						defer f.Close()
 						f.Write([]byte(strings.Replace(strings.Replace(controllerText, "{{[Controller]}}", os.Args[2]+"Controller", -1), "{{[Name]}}", os.Args[2], -1)))
@@ -120,6 +121,27 @@ func main() {
 		flag.Usage()
 
 	}
+}
+
+//调用os.MkdirAll递归创建文件夹
+func createFile(filePath string) error {
+	if !isExist(filePath) {
+		err := os.MkdirAll(filePath, os.ModePerm)
+		return err
+	}
+	return nil
+}
+
+// 判断所给路径文件/文件夹是否存在(返回true是存在)
+func isExist(path string) bool {
+	_, err := os.Stat(path) //os.Stat获取文件信息
+	if err != nil {
+		if os.IsExist(err) {
+			return true
+		}
+		return false
+	}
+	return true
 }
 
 func viewCheck(viewDir string, controllerDir string, ty string) error {
