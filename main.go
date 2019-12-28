@@ -4,20 +4,21 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"html/template"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
+	"text/template"
 )
 
 // 实际中应该用更好的变量名
 var (
 	h bool
 
-	new  bool
-	view bool
+	new        bool
+	view       bool
+	controller bool
 )
 
 const VERSION = "1.00"
@@ -33,6 +34,10 @@ freefish new -gopath [ProjectName]        :在GOPATH下创建一个新的mvc项�
 	flag.BoolVar(&view, "view", false, `在freefish生成的项目中操作视图 具体命令有:
 freefish view check ：检查Mvc视图文件是否存在，打印缺视图的控制器和视图
 freefish view create：遍历Mvc控制器文件，创建缺失的视图`)
+
+	flag.BoolVar(&controller, "controller", false, `在freefish生成的项目中操作视图 具体命令有:
+freefish controller [controllerName] ：在controller文件夹下生成 controllerName+"Controller" 控制器
+freefish controller create：遍历Mvc控制器文件，创建缺失的视图`)
 
 	// 改变默认的 Usage
 	flag.Usage = usage
