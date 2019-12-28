@@ -70,6 +70,7 @@ func main() {
 			path := filepath.Join(GOPATH, "src", os.Args[3])
 			WorkDir = path
 			ProjectName = os.Args[3]
+			importPath = ProjectName
 			createMvc(os.Args[3])
 		} else if (lens == 5 || lens == 4) && os.Args[3] == "-path" {
 			tmp, _ := filepath.Abs("")
