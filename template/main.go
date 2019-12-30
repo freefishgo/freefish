@@ -13,7 +13,7 @@ func main() {
 	// 通过注册中间件来打印任务处理时间服务
 	freefishgo.UseMiddleware(&printTimeMiddleware.PrintTimeMiddleware{})
 	// 利用中间件来实现http到https的转换
-	//conf.Build.UseMiddleware(&httpToHttps.HttpToHttps{})
+	//freefishgo.UseMiddleware(&httpToHttps.HttpToHttps{})
 	// 把mvc实例注册到管道中
 	freefishgo.UseMiddleware(mvc.DefaultMvcApp)
 	freefishgo.DefaultConfig.Listen.HTTPPort = 8080
