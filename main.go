@@ -288,7 +288,7 @@ const (
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 <body>
-	欢迎使用 fishFreeGoMvc
+	<h1>欢迎使用 fishFreeGoMvc</h1>
 </body>
 </html>`
 	controllerText string = `package controllers
