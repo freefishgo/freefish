@@ -14,7 +14,7 @@ func init() {
 	mvc.AddHandlers(&HomeController{})
 }
 
-// Index为{Action}的值 该方法的默认路由为/Home/Index 最后的单词为请求方式  该例子为Post请求
+// Index为{Action}的值 该方法的默认路由为/Home/Index 最后的单词为请求方式  默认为Get  如需设置为post 例：IndexPost
 func (c *HomeController) Index() {
 	c.Data["Website"] = "freefishgo.com"
 	c.Data["Email"] = "a1085052074@qq.com"
