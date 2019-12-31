@@ -39,7 +39,7 @@ freefish new -gopath [ProjectName]        :在GOPATH下创建一个新的mvc项�
 freefish -v check ：检查Mvc视图文件是否存在，打印缺视图的控制器和视图
 freefish -v create：遍历Mvc控制器文件，创建缺失的视图`)
 
-	flag.BoolVar(&controller, "-c", false, `在freefish生成的项目中操作视图 具体命令有:
+	flag.BoolVar(&controller, "-c", false, `在freefish生成的项目中控制器 具体命令有:
 freefish -c [controllerName] ：在controllers文件夹下生成 controllerName+"Controller" 控制器`)
 
 	// 改变默认的 Usage
