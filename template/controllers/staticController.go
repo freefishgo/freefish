@@ -27,6 +27,15 @@ type data struct {
 // 由于重写了该动作的路由为：static/{path:allString}  所以d.Path 即为请求url中出 static/ 后面的部分
 func (static *staticController) StaticFile(d *data) {
 	if f, err := os.Open(filepath.Join("static", d.Path)); err == nil {
+		//static.Response.Header().Set("Cache-Control","max-age=3600")
+		switch filepath.Ext(d.Path) {
+		case ".css":
+			static.Response.Header().Set("Content-Type", "text/css")
+			break
+		case ".js":
+			static.Response.Header().Set("Content-Type", "application/javascript")
+			break
+		}
 		io.Copy(static.Response, f)
 	} else {
 		static.Response.WriteHeader(404)
