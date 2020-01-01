@@ -21,8 +21,3 @@ func (c *HomeController) Index() {
 	// 调用模板引擎   默认模板地址为{ Controller}/{Action}.fish    即为Home/Index， c.UseTplPath()等效于c.UseTplPath("Home/Index")
 	c.UseTplPath()
 }
-
-// 重写 指定动作的路由 该方法会在路由注册时调用
-func (c *HomeController) OverwriteRouter() []*mvc.ControllerActionRouter {
-	return nil
-}

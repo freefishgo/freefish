@@ -309,11 +309,6 @@ func ({{[Name]}} *{{[Controller]}}) Index() {
 
 }
 
-// 重写 指定动作的路由 该方法会在路由注册时调用
-func ({{[Name]}} *{{[Controller]}}) OverwriteRouter() []*mvc.ControllerActionRouter {
-	return nil
-}
-
 // 控制器执行前调用
 func ({{[Name]}} *{{[Controller]}}) Prepare() {
 	//log.Println("子类的Prepare")

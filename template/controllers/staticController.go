@@ -13,6 +13,11 @@ type staticController struct {
 
 // 控制器注册
 func init() {
+	static := staticController{}
+	// 重写 指定动作的路由 该方法会在路由注册时调用
+	static.ActionRouterList = append(static.ActionRouterList,
+		&mvc.ActionRouter{RouterPattern: "static/{path:allString}",
+			ControllerActionFuncName: "StaticFile"})
 	mvc.AddHandlers(&staticController{})
 }
 
@@ -41,11 +46,4 @@ func (static *staticController) StaticFile(d *data) {
 		static.Response.WriteHeader(404)
 		static.Response.Write([]byte(err.Error()))
 	}
-}
-
-// 重写 指定动作的路由 该方法会在路由注册时调用
-func (static *staticController) OverwriteRouter() []*mvc.ControllerActionRouter {
-	tmp := make([]*mvc.ControllerActionRouter, 0)
-	tmp = append(tmp, &mvc.ControllerActionRouter{RouterPattern: "static/{path:allString}", ControllerActionFuncName: "StaticFile"})
-	return tmp
 }
