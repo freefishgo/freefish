@@ -2,6 +2,7 @@ package routers
 
 import (
 	"github.com/freefishgo/freefishgo/middlewares/mvc"
+	_ "{{[.ProjectName]}}/controllers"
 )
 
 func init() {
