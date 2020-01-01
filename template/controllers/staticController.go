@@ -14,7 +14,7 @@ type staticController struct {
 // 控制器注册
 func init() {
 	static := staticController{}
-	// 重写 指定动作的路由 该方法会在路由注册时调用
+	// 重写 指定动作的路由
 	static.ActionRouterList = append(static.ActionRouterList,
 		&mvc.ActionRouter{RouterPattern: "static/{path:allString}",
 			ControllerActionFuncName: "StaticFile"})
