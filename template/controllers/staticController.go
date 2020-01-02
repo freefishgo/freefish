@@ -41,6 +41,7 @@ func (static *staticController) StaticFile(d *data) {
 			static.Response.Header().Set("Content-Type", "application/javascript")
 			break
 		}
+		defer f.Close()
 		io.Copy(static.Response, f)
 	} else {
 		static.Response.WriteHeader(404)
