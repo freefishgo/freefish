@@ -16,12 +16,5 @@ func main() {
 	// 把mvc实例注册到管道中
 	freefishgo.UseMiddleware(mvc.DefaultMvcApp)
 	freefishgo.DefaultConfig.Listen.HTTPPort = 8080
-	err := freefishgo.Run()
-	for {
-		select {
-		case e := <-err:
-			panic(e)
-
-		}
-	}
+	freefishgo.Run()
 }
