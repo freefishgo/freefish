@@ -20,9 +20,10 @@ import (
 var (
 	h bool
 
-	new        bool
-	view       bool
-	controller bool
+	new         bool
+	view        bool
+	controller  bool
+	scontroller bool
 )
 
 const VERSION = "1.00"
@@ -41,6 +42,8 @@ freefish -v create：遍历Mvc控制器文件，创建缺失的视图`)
 
 	flag.BoolVar(&controller, "-c", false, `在freefish生成的项目中控制器 具体命令有:
 freefish -c [controllerName] ：在controllers文件夹下生成 controllerName+"Controller" 控制器`)
+	flag.BoolVar(&scontroller, "-cs", false, `在freefish生成的项目中http状态处理控制器 具体命令有:
+freefish -c [StateControllerName] ：在controllers文件夹下生成 controllerName+"StateController" 控制器`)
 
 	// 改变默认的 Usage
 	flag.Usage = usage
@@ -106,6 +109,27 @@ func main() {
 						defer f.Close()
 						f.Write([]byte(strings.Replace(strings.Replace(controllerText, "{{[Controller]}}", os.Args[2]+"Controller", -1), "{{[Name]}}", os.Args[2], -1)))
 						log.Println("freeFish:->Controller:" + os.Args[2] + "Controller创建成功,文件地址为:" + path)
+					} else {
+						panic(err)
+					}
+				}
+			} else {
+				panic(err)
+			}
+		} else {
+			flag.Usage()
+		}
+	case "-cs":
+		if lens == 3 {
+			path := filepath.Join("controllers", os.Args[2]+"StateController.go")
+			if b, err := pathExists(path); err == nil {
+				if b {
+					log.Println("freeFish:->Controller:" + os.Args[2] + "创建失败,由于已有" + os.Args[2] + "Controller.go已经存在")
+				} else {
+					if f, err := os.Create(path); err == nil {
+						defer f.Close()
+						f.Write([]byte(strings.Replace(strings.Replace(stateCodeControllerText, "{{[Controller]}}", os.Args[2]+"StateController", -1), "{{[Name]}}", os.Args[2], -1)))
+						log.Println("freeFish:->Controller:" + os.Args[2] + "StateCodeController创建成功,文件地址为:" + path)
 					} else {
 						panic(err)
 					}
@@ -318,6 +342,35 @@ func ({{[Name]}} *{{[Controller]}}) Prepare() {
 func ({{[Name]}} *{{[Controller]}}) Finish() {
 	//log.Println("子类的Finish")
 }`
+	stateCodeControllerText = `package controllers
+
+import (
+	"github.com/freefishgo/freefishgo/middlewares/mvc"
+)
+
+func init() {
+	mvc.SetStateCodeHandlers(&{{[Controller]}}{})
+}
+
+type {{[Name]}}StateCodeController struct {
+	mvc.StateCodeController
+}
+
+// 500 错误处理函数
+func ({{[Name]}} *{{[Controller]}}) Error500() {
+	{{[Name]}}.StateCodeController.Error500()
+}
+
+// 403 处理函数
+func ({{[Name]}} *{{[Controller]}}) Forbidden403() {
+	{{[Name]}}.StateCodeController.Forbidden403()
+}
+
+// 404 处理函数
+func ({{[Name]}} *{{[Controller]}}) NotFind404() {
+	{{[Name]}}.StateCodeController.NotFind404()
+}
+`
 )
 
 func replaceActionName(actionName string) string {
