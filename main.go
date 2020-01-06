@@ -128,7 +128,7 @@ func main() {
 				} else {
 					if f, err := os.Create(path); err == nil {
 						defer f.Close()
-						f.Write([]byte(strings.Replace(strings.Replace(stateCodeControllerText, "{{[Controller]}}", os.Args[2]+"StateController", -1), "{{[Name]}}", os.Args[2], -1)))
+						f.Write([]byte(strings.Replace(strings.Replace(stateCodeControllerText, "{{[Controller]}}", os.Args[2]+"StateCodeController", -1), "{{[Name]}}", os.Args[2], -1)))
 						log.Println("freeFish:->Controller:" + os.Args[2] + "StateCodeController创建成功,文件地址为:" + path)
 					} else {
 						panic(err)
