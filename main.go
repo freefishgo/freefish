@@ -43,7 +43,7 @@ freefish -v create：遍历Mvc控制器文件，创建缺失的视图`)
 	flag.BoolVar(&controller, "-c", false, `在freefish生成的项目中控制器 具体命令有:
 freefish -c [controllerName] ：在controllers文件夹下生成 controllerName+"Controller" 控制器`)
 	flag.BoolVar(&scontroller, "-cs", false, `在freefish生成的项目中http状态处理控制器 具体命令有:
-freefish -c [StateControllerName] ：在controllers文件夹下生成 controllerName+"StateController" 控制器`)
+freefish -c [StatusControllerName] ：在controllers文件夹下生成 controllerName+"StatusController" 控制器`)
 
 	// 改变默认的 Usage
 	flag.Usage = usage
@@ -121,15 +121,15 @@ func main() {
 		}
 	case "-cs":
 		if lens == 3 {
-			path := filepath.Join("controllers", os.Args[2]+"StateController.go")
+			path := filepath.Join("controllers", os.Args[2]+"StatusController.go")
 			if b, err := pathExists(path); err == nil {
 				if b {
-					log.Println("freeFish:->Controller:" + os.Args[2] + "创建失败,由于已有" + os.Args[2] + "Controller.go已经存在")
+					log.Println("freeFish:->Controller:" + os.Args[2] + "创建失败,由于已有" + os.Args[2] + "StatusController.go已经存在")
 				} else {
 					if f, err := os.Create(path); err == nil {
 						defer f.Close()
-						f.Write([]byte(strings.Replace(strings.Replace(stateCodeControllerText, "{{[Controller]}}", os.Args[2]+"StateCodeController", -1), "{{[Name]}}", os.Args[2], -1)))
-						log.Println("freeFish:->Controller:" + os.Args[2] + "StateCodeController创建成功,文件地址为:" + path)
+						f.Write([]byte(strings.Replace(strings.Replace(stateCodeControllerText, "{{[Controller]}}", os.Args[2]+"StatusCodeController", -1), "{{[Name]}}", os.Args[2], -1)))
+						log.Println("freeFish:->Controller:" + os.Args[2] + "StatusCodeController创建成功,文件地址为:" + path)
 					} else {
 						panic(err)
 					}
