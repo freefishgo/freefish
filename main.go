@@ -352,7 +352,7 @@ func init() {
 	mvc.SetStatusCodeHandlers(&{{[Controller]}}{})
 }
 
-type {{[Name]}}StateCodeController struct {
+type {{[Name]}}StatusCodeController struct {
 	mvc.StatusCodeController
 }
 
