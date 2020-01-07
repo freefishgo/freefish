@@ -349,26 +349,26 @@ import (
 )
 
 func init() {
-	mvc.SetStateCodeHandlers(&{{[Controller]}}{})
+	mvc.SetStatusCodeHandlers(&{{[Controller]}}{})
 }
 
 type {{[Name]}}StateCodeController struct {
-	mvc.StateCodeController
+	mvc.StatusCodeController
 }
 
 // 500 错误处理函数
 func ({{[Name]}} *{{[Controller]}}) Error500() {
-	{{[Name]}}.StateCodeController.Error500()
+	{{[Name]}}.StatusCodeController.Error500()
 }
 
 // 403 处理函数
 func ({{[Name]}} *{{[Controller]}}) Forbidden403() {
-	{{[Name]}}.StateCodeController.Forbidden403()
+	{{[Name]}}.StatusCodeController.Forbidden403()
 }
 
 // 404 处理函数
 func ({{[Name]}} *{{[Controller]}}) NotFind404() {
-	{{[Name]}}.StateCodeController.NotFind404()
+	{{[Name]}}.StatusCodeController.NotFind404()
 }
 `
 )
