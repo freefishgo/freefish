@@ -37,8 +37,8 @@ freefish new [ProjectName] -path [dirPath]:在当前目录dirPath创建mvc项目
 freefish new -gopath [ProjectName]        :在GOPATH下创建一个新的mvc项目`)
 
 	flag.BoolVar(&view, "-v", false, `在freefish生成的项目中操作视图 具体命令有:
-freefish -v check ：检查Mvc视图文件是否存在，打印缺视图的控制器和视图
-freefish -v create：遍历Mvc控制器文件，创建缺失的视图`)
+freefish -v check ：检查Mvc视图文件是否存在，打印缺视图的控制器和视图,仅供参考
+freefish -v create：遍历Mvc控制器文件，创建缺失的视图,仅供参考`)
 
 	flag.BoolVar(&controller, "-c", false, `在freefish生成的项目中控制器 具体命令有:
 freefish -c [controllerName] ：在controllers文件夹下生成 controllerName+"Controller" 控制器`)
@@ -261,7 +261,11 @@ func viewCheck(viewDir string, controllerDir string, ty string) error {
 							if b, _ := pathExists(viewPath); !b {
 								switch ty {
 								case "check":
-									log.Println("freeFish:->路径:" + path + " Controller:" + s[0][1] + " Action:" + s[0][2] + " 缺失视图:" + v[1] + " 行号:" + strconv.Itoa(lineIndex))
+									if len(s) > 0 && len(s[0]) > 2 {
+										log.Println("freeFish:->路径:" + path + " Controller:" + s[0][1] + " Action:" + s[0][2] + " 缺失视图:" + v[1] + " 行号:" + strconv.Itoa(lineIndex))
+									} else {
+										log.Println("freeFish:->路径:" + path + " 可能缺失视图:" + v[1] + " 行号:" + strconv.Itoa(lineIndex))
+									}
 								case "create":
 									createFile(filepath.Dir(viewPath))
 									f, err := os.Create(viewPath)
@@ -270,7 +274,11 @@ func viewCheck(viewDir string, controllerDir string, ty string) error {
 									if err != nil {
 										panic(err)
 									}
-									log.Println("freeFish:->路径:" + path + " Controller:" + s[0][1] + " Action:" + s[0][2] + " 成功创建视图:" + v[1] + " 行号:" + strconv.Itoa(lineIndex))
+									if len(s) > 0 && len(s[0]) > 2 {
+										log.Println("freeFish:->路径:" + path + " Controller:" + s[0][1] + " Action:" + s[0][2] + " 成功创建视图:" + v[1] + " 行号:" + strconv.Itoa(lineIndex))
+									} else {
+										log.Println("freeFish:->路径:" + path + "   成功创建视图:" + v[1] + " 行号:" + strconv.Itoa(lineIndex))
+									}
 								}
 							}
 						}
