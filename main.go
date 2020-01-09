@@ -230,7 +230,7 @@ func viewCheck(viewDir string, controllerDir string, ty string) error {
 				tmpStr += line + " "
 				upCount += strings.Count(line, "{")
 				offCount += strings.Count(line, "}")
-				r = regexp.MustCompile(`UseTplPath[\ ]?\([\ ]?(.*?)[\ ]?\)`)
+				r = regexp.MustCompile(`\.UseTplPath[\ ]?\([\ ]?(.*?)[\ ]?\)`)
 				if r.MatchString(line) {
 					sl := r.FindAllStringSubmatch(line, -1)
 					r = regexp.MustCompile(`func[\ ]?\([\w+$]+[\ ]+\*[\ ]?([\w+$]+)[\ ]?\)[\ ]?([\w+$]+)\(.*?\)`)
