@@ -93,7 +93,6 @@ func main() {
 	case "-v":
 		if lens == 3 && os.Args[2] == "check" {
 			viewCheck("", "", os.Args[2])
-			log.Println("仅供参考，因为只用了简单{ }判断结构体")
 		} else if lens == 3 && os.Args[2] == "create" {
 			viewCheck("", "", os.Args[2])
 		} else {
