@@ -3,7 +3,7 @@
 <head>
     <title>FreeFishGo</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link rel="shortcut icon" href="/static/img/fish.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="/img/fish.ico" type="image/x-icon" />
     <style type="text/css">
         *,body {
             margin: 0px;
@@ -26,7 +26,7 @@
         }
 
         .logo {
-            background-image: url("/static/img/fish.jpg");
+            background-image: url("/img/fish.jpg");
             background-repeat: no-repeat;
             -webkit-background-size: 100px 100px;
             background-size: 100px 100px;
