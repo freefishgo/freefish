@@ -32,7 +32,6 @@ func main() {
 	// 利用中间件来实现http到https的转换
 	//freefishgo.UseMiddleware(&httpToHttps.HttpToHttps{})
 	// 把mvc实例注册到管道中
-	freefishgo.UseMiddleware(mvc.DefaultMvcApp)
-	freefishgo.DefaultConfig.Listen.HTTPPort = 8080
+	freefishgo.UseMiddleware(mvc.GetDefaultMvcApp())
 	freefishgo.Run()
 }
