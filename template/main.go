@@ -6,8 +6,8 @@ import (
 	"github.com/freefishgo/freefishgo/middlewares/mvc"
 	"github.com/freefishgo/freefishgo/middlewares/printTimeMiddleware"
 	"os"
+	_ "{{[.ProjectName]}}/routers"
 )
-
 type config struct {
 	*freefishgo.Config
 	WebConfig *mvc.MvcWebConfig
