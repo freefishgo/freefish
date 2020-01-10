@@ -1,12 +1,33 @@
 package main
 
 import (
+	"encoding/json"
 	"github.com/freefishgo/freefishgo"
 	"github.com/freefishgo/freefishgo/middlewares/mvc"
 	"github.com/freefishgo/freefishgo/middlewares/printTimeMiddleware"
-	_ "{{[.ProjectName]}}/conf"
-	_ "{{[.ProjectName]}}/routers"
+	"os"
 )
+
+type config struct {
+	*freefishgo.Config
+	WebConfig *mvc.MvcWebConfig
+}
+
+func init() {
+	conf := new(config)
+	f, err := os.Open("conf/app.conf")
+	defer f.Close()
+	if err != nil {
+		panic(err)
+	}
+	json.NewDecoder(f).Decode(conf)
+	if err != nil {
+		panic(err)
+	}
+	freefishgo.DefaultConfig = conf.Config
+	mvc.DefaultMvcWebConfig = conf.WebConfig
+
+}
 
 func main() {
 	// 通过注册中间件来打印任务处理时间服务
