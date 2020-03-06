@@ -12,7 +12,7 @@ package middlewares
 //	return ctxtmp
 //}
 //
-//// 中间件注册是调用函数进行该中间件最后的设置
+//// 中间件注册时调用函数进行该中间件最后的设置
 //func (*Mid) LastInit(*config.Config) {
 //	//panic("implement me")
 //}
