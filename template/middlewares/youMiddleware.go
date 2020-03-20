@@ -12,6 +12,7 @@ package middlewares
 //// 中间件实现允许跨域请求
 //func (m *Mid) Middleware(ctx *freefishgo.HttpContext, next freefishgo.Next) *freefishgo.HttpContext {
 //	ctx.Response.Header().Add("Access-Control-Allow-Origin","*")
+//  ctx.Response.Header().Add("Access-Control-Allow-Methods", "GET, POST, DELETE,PUT")
 //	ctxtmp := next(ctx)
 //	return ctxtmp
 //}
