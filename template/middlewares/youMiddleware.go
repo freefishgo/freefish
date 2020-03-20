@@ -13,6 +13,9 @@ package middlewares
 //func (m *Mid) Middleware(ctx *freefishgo.HttpContext, next freefishgo.Next) *freefishgo.HttpContext {
 //	ctx.Response.Header().Add("Access-Control-Allow-Origin","*")
 //  ctx.Response.Header().Add("Access-Control-Allow-Methods", "GET, POST, DELETE,PUT")
+//	if http.MethodOptions == ctx.Request.Method {
+//	return ctx
+//	}
 //	ctxtmp := next(ctx)
 //	return ctxtmp
 //}
