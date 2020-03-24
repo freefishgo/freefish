@@ -15,9 +15,9 @@ func init() {
 }
 
 // Index为{Action}的值 该方法的默认路由为/Home/Index 最后的单词为请求方式  默认为Get  如需设置为post 例：IndexPost
-func (c *HomeController) Index() {
-	c.Data["Website"] = "freefishgo.com"
-	c.Data["Email"] = "a1085052074@qq.com"
-	// 调用模板引擎   默认模板地址为{ Controller}/{Action}.fish    即为Home/Index， c.UseTplPath()等效于c.UseTplPath("Home/Index")
-	c.UseTplPath()
+func (home *HomeController) Index() {
+	home.Data["Website"] = "freefishgo.com"
+	home.Data["Email"] = "a1085052074@qq.com"
+	// 调用模板引擎   默认模板地址为{ Controller}/{Action}.fish    即为Home/Index， home.UseTplPath()等效于c.UseTplPath("Home/Index")
+	home.UseTplPath()
 }
