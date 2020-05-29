@@ -18,6 +18,6 @@ func init() {
 func (home *homeController) Index() {
 	home.Data["Website"] = "freefishgo.com"
 	home.Data["Email"] = "a1085052074@qq.com"
-	// 调用模板引擎   默认模板地址为{ Controller}/{Action}.fish    即为Home/Index， home.UseTplPath()等效于c.UseTplPath("home/Index")
+	// 调用模板引擎   默认模板地址为{ Controller}/{Action}.fish    即为home/Index， home.UseTplPath()等效于home.UseTplPath("home/Index")
 	home.UseTplPath()
 }
