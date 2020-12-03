@@ -419,7 +419,7 @@ func createMvc(mvcName string) {
 		return
 	}
 	log.Println(filepath.Join(GOPATH, "src/github.com/freefishgo/freefish/template"))
-	if err := os.Mkdir(WorkDir, os.ModeDir); err != nil {
+	if err := os.Mkdir(WorkDir, os.ModeDir|os.ModePerm); err != nil {
 		panic(err.Error())
 	}
 	if err := CopyDir(filepath.Join(GOPATH, "src/github.com/freefishgo/freefish/template"), WorkDir); err != nil {
